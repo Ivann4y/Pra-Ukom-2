@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +16,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('guest')->group(function(){
+    Route::view('/signup', 'auth.signup', ['tittle' => 'Sign Up'])->name('signup');
+    Route::view('/signin', 'auth.signin', ['tittle' => 'Sign In']);
+    Route::controller(AuthController::class)->group(function(){
+        Route::post('/signup', 'signup');
+        Route::post('/signin', 'signin');
+    });
 });
+
+Route::middleware('auth')->group(function(){
+    Route::controller(UserController::class)->group(function(){
+        Route::get('/', 'index');
+    });
+
+    Route::post('/signout', [AuthController::class, 'signout']);
+
+    Route::controller(AlbumController::class)->group(function(){
+        Route::get('/album', 'index');
+    });
+});
+
+
