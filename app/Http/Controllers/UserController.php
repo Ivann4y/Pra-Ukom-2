@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Foto;
 
 class UserController extends Controller
 {
@@ -15,7 +16,8 @@ class UserController extends Controller
     {
         $tittle = 'Home';
         $user = User::where('id_user', auth()->id())->first();
-        return view('user.home.index', compact('tittle', 'user'));
+        $fotos = Foto::latest()->get();
+        return view('user.home.index', compact('tittle', 'user', 'fotos'));
     }
 
     /**
