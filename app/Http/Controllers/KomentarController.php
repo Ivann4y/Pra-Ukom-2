@@ -2,23 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Models\Foto;
-use App\Models\Like;
+use App\Models\Komentar;
+use App\Http\Requests\StoreKomentarRequest;
+use App\Http\Requests\UpdateKomentarRequest;
 
-class UserController extends Controller
+class KomentarController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tittle = 'Home';
-        $user = User::where('id_user', auth()->id())->first();
-        $fotos = Foto::latest()->get();
-        return view('user.home.index', compact('tittle', 'user', 'fotos'));
+        //
     }
 
     /**
@@ -32,15 +27,22 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(StoreKomentarRequest $request)
     {
-        //
+        $data = [
+            'komentar' => request('komentar'),
+            'id_user' => auth()->id(),
+            'id_foto' => request('id_foto')
+        ];
+
+        Komentar::create($data);
+        return back();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(Komentar $komentar)
     {
         //
     }
@@ -48,7 +50,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit(Komentar $komentar)
     {
         //
     }
@@ -56,7 +58,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateKomentarRequest $request, Komentar $komentar)
     {
         //
     }
@@ -64,7 +66,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(Komentar $komentar)
     {
         //
     }

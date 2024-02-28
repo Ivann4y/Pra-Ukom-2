@@ -17,4 +17,7 @@ class Foto extends Model
     public function album(){
         return $this->belongsTo(Album::class, 'id_album', 'id_album');
     }
+    public function like(){
+        return $this->hasMany(Like::class, 'id_foto', 'id_foto');
+    }
 }

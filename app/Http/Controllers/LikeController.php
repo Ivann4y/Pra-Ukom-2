@@ -2,23 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Models\Foto;
 use App\Models\Like;
+use App\Http\Requests\StoreLikeRequest;
+use App\Http\Requests\UpdateLikeRequest;
 
-class UserController extends Controller
+class LikeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tittle = 'Home';
-        $user = User::where('id_user', auth()->id())->first();
-        $fotos = Foto::latest()->get();
-        return view('user.home.index', compact('tittle', 'user', 'fotos'));
+        //
     }
 
     /**
@@ -32,15 +27,27 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(StoreLikeRequest $request)
     {
-        //
+        $like = Like::where('id_foto', request('id_foto'))->where('id_user', auth()->id())->first();
+        if ($like) {
+            $like->delete();
+            return back();
+        }
+
+        $data = [
+            'id_foto'=>request('id_foto'),
+            'id_user'=>auth()->id()
+        ];
+
+        Like::create($data);
+        return back();
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show(Like $like)
     {
         //
     }
@@ -48,7 +55,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $user)
+    public function edit(Like $like)
     {
         //
     }
@@ -56,7 +63,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateLikeRequest $request, Like $like)
     {
         //
     }
@@ -64,7 +71,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(Like $like)
     {
         //
     }

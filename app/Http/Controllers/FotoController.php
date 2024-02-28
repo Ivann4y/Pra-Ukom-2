@@ -6,6 +6,8 @@ use App\Models\Foto;
 use App\Http\Requests\StoreFotoRequest;
 use App\Http\Requests\UpdateFotoRequest;
 use App\Models\Album;
+use App\Models\Komentar;
+use App\Models\Like;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
@@ -18,7 +20,7 @@ class FotoController extends Controller
     {
         $tittle = 'Profil';
         $user = User::where('id_user', auth()->id())->first();
-        $fotos = Foto::latest()->get();
+        $fotos = Foto::where('id_user', auth()->id())->get();
         return view('user.profil.index', compact('tittle', 'user', 'fotos'));
     }
 
@@ -58,7 +60,9 @@ class FotoController extends Controller
         $tittle = 'Detail Foto';
         $fotos = $id_foto;
         $user = User::where('id_user', auth()->id())->first();
-        return view('user.profil.detail', compact('tittle', 'fotos', 'user'));
+        $like = Like::where('id_foto', $fotos->id_foto)->where('id_user', auth()->id())->first();
+        $komentars = Komentar::where('id_foto', $fotos->id_foto)->get();
+        return view('user.profil.detail', compact('tittle', 'fotos', 'user', 'like', 'komentars'));
     }
 
     /**
